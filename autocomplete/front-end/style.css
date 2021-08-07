@@ -1,0 +1,22 @@
+.empty-data,
+.loading-data {
+  min-height: 200px;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-empty {
+  width: 1.5rem;
+}
+
+.list-group {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.list-group .hight-light {
+  background-color: yellow;
+}
