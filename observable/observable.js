@@ -55,6 +55,23 @@ window.Observable = (function () {
 
       return new Observable(_subscribe)
     }
+
+    static fromEvent(element, eventName) {
+      function _subscribe(observer) {
+        function handler(e) {
+          observer.next(e)
+        }
+        element.addEventListener(eventName, handler)
+
+        return {
+          unsubsribe() {
+            element.removeEventListener(eventName, handler)
+          },
+        }
+      }
+
+      return new Observable(_subscribe)
+    }
   }
 
   return Observable
