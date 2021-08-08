@@ -46,15 +46,25 @@
 //     complete: () => console.log('[1. take] complete'),
 //   })
 
-// Map & Filter
-const buttonEl = document.getElementById('button')
-window.sub4 = Observable.fromEvent(buttonEl, 'click')
-  .take(10)
-  .map((e) => {
-    return {
-      clientX: e.clientX,
-      clientY: e.clientY,
-    }
+// // Map & Filter
+// const buttonEl = document.getElementById('button')
+// window.sub4 = Observable.fromEvent(buttonEl, 'click')
+//   .take(10)
+//   .map((e) => {
+//     return {
+//       clientX: e.clientX,
+//       clientY: e.clientY,
+//     }
+//   })
+//   .filter((e) => e.clientX > 50)
+//   .subscribe((data) => console.log(data))
+
+// Debounce time
+const inputEl = document.getElementById('input')
+window.sub5 = Observable.fromEvent(inputEl, 'keydown')
+  .debounceTime(1000)
+  .subscribe({
+    next: (e) => console.log(e.target.value),
+    error: (err) => console.log(err),
+    complete: () => console.log('complete'),
   })
-  .filter((e) => e.clientX > 50)
-  .subscribe((data) => console.log(data))
