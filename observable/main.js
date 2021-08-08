@@ -28,11 +28,20 @@
 //   console.log('2. Next', data)
 // )
 
-// Event
-const buttonEl = document.getElementById('button')
-window.sub3 = Observable.fromEvent(buttonEl, 'click').subscribe((e) =>
-  console.log({
-    clientX: e.clientX,
-    clientY: e.clientY,
+// // Event
+// const buttonEl = document.getElementById('button')
+// window.sub3 = Observable.fromEvent(buttonEl, 'click').subscribe((e) =>
+//   console.log({
+//     clientX: e.clientX,
+//     clientY: e.clientY,
+//   })
+// )
+
+// Take
+Observable.interval(1000)
+  .take(5)
+  .subscribe({
+    next: (data) => console.log('[1. take] next:', data),
+    error: (err) => console.log('[1. take] error:', err),
+    complete: () => console.log('[1. take] complete'),
   })
-)
