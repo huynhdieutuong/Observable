@@ -37,11 +37,24 @@
 //   })
 // )
 
-// Take
-Observable.interval(1000)
-  .take(5)
-  .subscribe({
-    next: (data) => console.log('[1. take] next:', data),
-    error: (err) => console.log('[1. take] error:', err),
-    complete: () => console.log('[1. take] complete'),
+// // Take
+// Observable.interval(1000)
+//   .take(5)
+//   .subscribe({
+//     next: (data) => console.log('[1. take] next:', data),
+//     error: (err) => console.log('[1. take] error:', err),
+//     complete: () => console.log('[1. take] complete'),
+//   })
+
+// Map & Filter
+const buttonEl = document.getElementById('button')
+window.sub4 = Observable.fromEvent(buttonEl, 'click')
+  .take(10)
+  .map((e) => {
+    return {
+      clientX: e.clientX,
+      clientY: e.clientY,
+    }
   })
+  .filter((e) => e.clientX > 50)
+  .subscribe((data) => console.log(data))
