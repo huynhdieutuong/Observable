@@ -203,6 +203,41 @@ window.Observable = (function () {
 
       return new Observable(_subscribe)
     }
+
+    buffer(closeObs$) {
+      const source$ = this
+
+      function _subscribe(observer) {
+        let dataArr = []
+        const subscription = source$.subscribe({
+          next: (data) => {
+            dataArr.push(data)
+          },
+          error: (err) => {
+            observer.error(err)
+          },
+          complete: () => {
+            observer.complete()
+          },
+        })
+
+        const closeSubscription = closeObs$.subscribe({
+          next: () => {
+            observer.next(dataArr)
+            dataArr = []
+          },
+        })
+
+        return {
+          unsubsribe() {
+            subscription.unsubsribe()
+            closeSubscription.unsubsribe()
+          },
+        }
+      }
+
+      return new Observable(_subscribe)
+    }
   }
 
   return Observable

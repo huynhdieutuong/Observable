@@ -59,12 +59,25 @@
 //   .filter((e) => e.clientX > 50)
 //   .subscribe((data) => console.log(data))
 
-// Debounce time
-const inputEl = document.getElementById('input')
-window.sub5 = Observable.fromEvent(inputEl, 'keydown')
-  .debounceTime(1000)
-  .subscribe({
-    next: (e) => console.log(e.target.value),
-    error: (err) => console.log(err),
-    complete: () => console.log('complete'),
-  })
+// // Debounce time
+// const inputEl = document.getElementById('input')
+// window.sub5 = Observable.fromEvent(inputEl, 'keydown')
+//   .debounceTime(1000)
+//   .subscribe({
+//     next: (e) => console.log(e.target.value),
+//     error: (err) => console.log(err),
+//     complete: () => console.log('complete'),
+//   })
+
+// Double click
+function doubleClick(ele, cb) {
+  const click$ = Observable.fromEvent(ele, 'click')
+
+  click$
+    .buffer(click$.debounceTime(500))
+    .filter((data) => data.length === 2)
+    .map((data) => data[0])
+    .subscribe(cb)
+}
+const buttonEl = document.getElementById('button')
+doubleClick(buttonEl, (e) => console.log(e))
