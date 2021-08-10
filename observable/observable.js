@@ -31,7 +31,7 @@ window.Observable = (function () {
         }, miliseconds)
 
         return {
-          unsubsribe() {
+          unsubscribe() {
             clearTimeout(timeoutId)
           },
         }
@@ -47,7 +47,7 @@ window.Observable = (function () {
         }, miliseconds)
 
         return {
-          unsubsribe() {
+          unsubscribe() {
             clearInterval(intervalId)
           },
         }
@@ -64,8 +64,36 @@ window.Observable = (function () {
         element.addEventListener(eventName, handler)
 
         return {
-          unsubsribe() {
+          unsubscribe() {
             element.removeEventListener(eventName, handler)
+          },
+        }
+      }
+
+      return new Observable(_subscribe)
+    }
+
+    static fromFetch(url, request = {}) {
+      function _subscribe(observer) {
+        const controller = new AbortController()
+        const signal = controller.signal
+        const params = {
+          ...request,
+          signal,
+        }
+
+        fetch(url, params)
+          .then((res) => {
+            observer.next(res)
+            observer.complete()
+          })
+          .catch((err) => {
+            observer.error(err)
+          })
+
+        return {
+          unsubscribe() {
+            controller.abort()
           },
         }
       }
@@ -93,7 +121,7 @@ window.Observable = (function () {
 
               if (counter === number) {
                 observer.complete()
-                subscription.unsubsribe()
+                subscription.unsubscribe()
               }
             },
             error: (err) => {
@@ -106,8 +134,8 @@ window.Observable = (function () {
         }
 
         return {
-          unsubsribe() {
-            if (subscription) subscription.unsubsribe()
+          unsubscribe() {
+            if (subscription) subscription.unsubscribe()
           },
         }
       }
@@ -133,8 +161,8 @@ window.Observable = (function () {
         })
 
         return {
-          unsubsribe() {
-            subscription.unsubsribe()
+          unsubscribe() {
+            subscription.unsubscribe()
           },
         }
       }
@@ -160,8 +188,8 @@ window.Observable = (function () {
         })
 
         return {
-          unsubsribe() {
-            subscription.unsubsribe()
+          unsubscribe() {
+            subscription.unsubscribe()
           },
         }
       }
@@ -195,8 +223,8 @@ window.Observable = (function () {
         })
 
         return {
-          unsubsribe() {
-            subscription.unsubsribe()
+          unsubscribe() {
+            subscription.unsubscribe()
           },
         }
       }
@@ -229,9 +257,9 @@ window.Observable = (function () {
         })
 
         return {
-          unsubsribe() {
-            subscription.unsubsribe()
-            closeSubscription.unsubsribe()
+          unsubscribe() {
+            subscription.unsubscribe()
+            closeSubscription.unsubscribe()
           },
         }
       }

@@ -69,15 +69,24 @@
 //     complete: () => console.log('complete'),
 //   })
 
-// Double click
-function doubleClick(ele, cb) {
-  const click$ = Observable.fromEvent(ele, 'click')
+// // Double click
+// function doubleClick(ele, cb) {
+//   const click$ = Observable.fromEvent(ele, 'click')
 
-  click$
-    .buffer(click$.debounceTime(500))
-    .filter((data) => data.length === 2)
-    .map((data) => data[0])
-    .subscribe(cb)
-}
-const buttonEl = document.getElementById('button')
-doubleClick(buttonEl, (e) => console.log(e))
+//   click$
+//     .buffer(click$.debounceTime(500))
+//     .filter((data) => data.length === 2)
+//     .map((data) => data[0])
+//     .subscribe(cb)
+// }
+// const buttonEl = document.getElementById('button')
+// doubleClick(buttonEl, (e) => console.log(e))
+
+// From fetch
+const sub6 = Observable.fromFetch('https://api.github.com/users').subscribe(
+  async (res) => {
+    const data = await res.json()
+    console.log(data)
+  }
+)
+sub6.unsubscribe()
