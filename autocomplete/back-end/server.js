@@ -4,7 +4,8 @@ const app = express()
 const cors = require('cors')
 
 const data = require('./fakeData.js')
-
+let count = 0
+let randomMiliseconds = 1000
 app.use(cors())
 app.use(bodyParser.json())
 
@@ -23,7 +24,6 @@ app.get('/data', (req, res) => {
   let limit
   let offset
   let searchStr = req.query.search || ''
-
   const dataSearch = data.filter((item) => {
     return item.label.toLowerCase().indexOf(searchStr.toLowerCase()) !== -1
   })
@@ -40,7 +40,15 @@ app.get('/data', (req, res) => {
     offset = 0
   }
 
-  const randomMiliseconds = Math.floor(Math.random() * 1000) + 500
+  count++
+  if (count === 1) {
+    randomMiliseconds = 3000
+  } else if (count === 2) {
+    randomMiliseconds = 1000
+    count = 0
+  }
+
+  // const randomMiliseconds = Math.floor(Math.random() * 1000) + 500
   setTimeout(() => {
     res.send(dataSearch.slice(Number(offset), Number(limit) + Number(offset)))
   }, randomMiliseconds)
