@@ -13,7 +13,7 @@ const obs$ = Observable.fromEvent(inputEl, 'keydown')
     resEl.innerHTML = renderLoading()
     return Observable.ajax(url)
   })
-  .concatAll()
+  .mergeAll()
   .subscribe((data) => {
     showData(data.response)
   })
