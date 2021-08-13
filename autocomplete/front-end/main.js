@@ -8,12 +8,17 @@ const obs$ = Observable.fromEvent(inputEl, 'keydown')
     queryString = e.target.value
     return queryString.length > 2
   })
-  .map((e) => {
+  // .map((e) => {
+  //   const url = `http://localhost:8888/data?search=${queryString}`
+  //   resEl.innerHTML = renderLoading()
+  //   return Observable.ajax(url)
+  // })
+  // .switch()
+  .switchMap((e) => {
     const url = `http://localhost:8888/data?search=${queryString}`
     resEl.innerHTML = renderLoading()
     return Observable.ajax(url)
   })
-  .switch()
   .subscribe((data) => {
     showData(data.response)
   })
