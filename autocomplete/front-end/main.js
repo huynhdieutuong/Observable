@@ -1,30 +1,41 @@
-const Observable = window.Rx.Observable
+// const Observable = window.Rx.Observable
+const { Observable, fromEvent } = rxjs
+const { ajax } = rxjs.ajax
+const { debounceTime, filter, switchMap } = rxjs.operators
 const inputEl = document.getElementById('js-input-search')
 const resEl = document.getElementById('js-results')
 let queryString
-const obs$ = Observable.fromEvent(inputEl, 'keydown')
-  .debounceTime(500)
-  .filter((e) => {
-    queryString = e.target.value
-    return queryString.length > 2
-  })
-  // .map((e) => {
-  //   const url = `http://localhost:8888/data?search=${queryString}`
-  //   resEl.innerHTML = renderLoading()
-  //   return Observable.ajax(url)
-  // })
-  // .switch()
-  .switchMap((e) => {
-    const url = `http://localhost:8888/data?search=${queryString}`
-    resEl.innerHTML = renderLoading()
-    return Observable.ajax(url)
-  })
+
+// Observable.fromEvent(inputEl, 'keydown')
+//   .debounceTime(500)
+//   .filter((e) => {
+//     queryString = e.target.value
+//     return queryString.length > 2
+//   })
+//   .switchMap((e) => {
+//     const url = `http://localhost:8888/data?search=${queryString}`
+//     resEl.innerHTML = renderLoading()
+//     return Observable.ajax(url)
+//   })
+//   .subscribe((data) => {
+//     showData(data.response)
+//   })
+fromEvent(inputEl, 'keydown')
+  .pipe(
+    debounceTime(500),
+    filter((e) => {
+      queryString = e.target.value
+      return queryString.length > 2
+    }),
+    switchMap((e) => {
+      const url = `http://localhost:8888/data?search=${queryString}`
+      resEl.innerHTML = renderLoading()
+      return ajax(url)
+    })
+  )
   .subscribe((data) => {
     showData(data.response)
   })
-// .subscribe((ajaxObs$) => {
-//   ajaxObs$.subscribe((data) => showData(data.response))
-// })
 
 function showData(data) {
   if (data.length) {
